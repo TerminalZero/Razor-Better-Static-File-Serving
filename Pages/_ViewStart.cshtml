@@ -1,0 +1,9 @@
+﻿@{
+    Layout = "_Layout";
+    string? Path = Context.GetRouteData().Values.First().Value?.ToString();
+    string jsFile = $"{Path}.cshtml.js";
+    string cssFile = $"{Path}.cshtml.css";
+}
+
+<script src="@jsFile"></script>
+<link rel="stylesheet" href="@cssFile" />
