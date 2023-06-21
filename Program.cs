@@ -1,5 +1,3 @@
-using Microsoft.Extensions.FileProviders;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
@@ -15,13 +13,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(new StaticFileOptions()
-{
-    FileProvider = new CompositeFileProvider(
-        new PhysicalFileProvider("/wwwroot"),
-        new PhysicalFileProvider("/Pages")
-    )
-});
+app.UseStaticFiles(new FileExtensionDirectoryMappings()
+    .AddDirectory("/wwwroot").ServingFileTypes()
+    .AddDirectory("/Pages").ServingFileTypes(".css", ".js")
+);
 
 app.UseRouting();
 
