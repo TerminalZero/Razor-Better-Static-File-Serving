@@ -1,8 +1,8 @@
 ﻿@{
     Layout = "_Layout";
-    string? Path = Context.GetRouteData().Values.First().Value?.ToString();
-    string jsFile = $"{Path}.cshtml.js";
-    string cssFile = $"{Path}.cshtml.css";
+    string? page = ViewContext.ActionDescriptor.DisplayName;
+    string jsFile = $"{page}.cshtml.js";
+    string cssFile = $"{page}.cshtml.css";
 }
 
 <script src="@jsFile"></script>
