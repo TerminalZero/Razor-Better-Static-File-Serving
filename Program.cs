@@ -1,7 +1,10 @@
+using TZeroSolutions.AspNetCore.ApplicationBuilderExtensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddLogging(_ => _.ClearProviders().AddConsole());
+builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();
 
@@ -13,10 +16,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles(new FileExtensionDirectoryMappings()
-    .AddDirectory("/wwwroot").ServingFileTypes()
-    .AddDirectory("/Pages").ServingFileTypes(".css", ".js")
-);
+
+app.UseFilteredDirectory("/wwwroot")
+    .ServingFileTypes("js");
+app.UseFilteredDirectory("/Pages")
+    .ServingFileTypes(".css",".js"); // serve only css and js files in Pages
 
 app.UseRouting();
 
