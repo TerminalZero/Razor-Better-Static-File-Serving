@@ -18,7 +18,7 @@ app.UseHttpsRedirection();
 
 
 app.UseFilteredDirectory("/wwwroot")
-    .ServingFileTypes("js");
+    .ServingFileTypes(); // serve all files in wwwroot
 app.UseFilteredDirectory("/Pages")
     .ServingFileTypes(".css",".js"); // serve only css and js files in Pages
 

@@ -16,12 +16,14 @@ public class FilteredDirectory
 {
     IApplicationBuilder _app;
     string[] _directories;
-    string[] _fileTypes = {};
+    string[] _fileTypes = { };
 
     public FilteredDirectory(IApplicationBuilder app, string[] directories)
     {
         _app = app;
-        _directories = directories;
+        _directories = directories
+            .Select(directory => directory.Substring(directory.IndexOf('/') == 0 ? 1 : 0))
+            .ToArray();
     }
 
     public IApplicationBuilder ServingFileTypes(params string[] fileTypes)
@@ -49,9 +51,9 @@ public class FilteredFileProvider : IFileProvider
 
     public IFileInfo GetFileInfo(string requestedPath)
     {
-        var allFiles = _directoryFiletypePairs.Keys
+        List<string> allFiles = _directoryFiletypePairs.Keys
             .SelectMany(directories => directories
-            .Select(directory => Directory.GetCurrentDirectory() + directory + requestedPath))
+                .Select(directory => Path.Combine(Directory.GetCurrentDirectory(), directory) + requestedPath))
             .Where(File.Exists)
             .ToList();
 
@@ -62,7 +64,7 @@ public class FilteredFileProvider : IFileProvider
 
             string fileExt = Path.GetExtension(file);
 
-            if (_directoryFiletypePairs.Values.Any(fileTypes => fileTypes != null && fileTypes.Contains(fileExt)))
+            if (_directoryFiletypePairs.Values.Any(fileTypes => fileTypes.Contains(fileExt)))
                 return new PhysicalFileInfo(new FileInfo(file));
         }
 
