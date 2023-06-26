@@ -1,9 +1,18 @@
-﻿@{
+﻿@inject TZeroSolutions.AspNetCore.ApplicationBuilderExtensions.FilteredDirectoryService DirectoryService
+
+@{
     Layout = "_Layout";
-    string? page = ViewContext.ActionDescriptor.DisplayName;
-    string jsFile = $"{page}.cshtml.js";
-    string cssFile = $"{page}.cshtml.css";
+    string? pageName = ViewContext.ActionDescriptor.DisplayName;
+    string jsFile = $"{pageName}.cshtml.js";
+    string cssFile = $"{pageName}.cshtml.css";
 }
 
-<script src="@jsFile"></script>
-<link rel="stylesheet" href="@cssFile" />
+@if (DirectoryService.FileExists(jsFile))
+{
+    <script src="@jsFile"></script>
+}
+
+@if (DirectoryService.FileExists(cssFile))
+{
+    <link href="@cssFile" rel="stylesheet"/>
+}

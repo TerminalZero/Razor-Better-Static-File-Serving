@@ -4,6 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddLogging(_ => _.ClearProviders().AddConsole());
+builder.Services.AddSingleton<FilteredDirectoryService>();
+
 builder.WebHost.UseStaticWebAssets();
 
 var app = builder.Build();

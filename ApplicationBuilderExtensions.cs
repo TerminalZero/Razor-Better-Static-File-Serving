@@ -12,6 +12,28 @@ public static class ApplicationBuilderExtensions
     }
 }
 
+public class FilteredDirectoryService
+{
+    public string[] Directories { get; set; } = { };
+    public List<string> Files { get; set; } = new();
+
+    public bool FileExists(string requestedPath)
+    {
+        if (Files.Contains(requestedPath))
+            return true;
+
+        string? requestedFile = Directories
+            .Select(directory => Path.Combine(Directory.GetCurrentDirectory(), directory) + requestedPath)
+            .Where(File.Exists)
+            .FirstOrDefault();
+
+        if (requestedFile != null)
+            Files.Add(requestedFile.Substring(requestedFile.LastIndexOf('/')));
+        
+        return Files.Count > 0;
+    }
+}
+
 public class FilteredDirectory
 {
     IApplicationBuilder _app;
@@ -20,10 +42,15 @@ public class FilteredDirectory
 
     public FilteredDirectory(IApplicationBuilder app, string[] directories)
     {
+        if (app.ApplicationServices.GetService<FilteredDirectoryService>() == null)
+            throw new InvalidOperationException("You must add FilteredDirectoryService to the service collection before calling UseFilteredDirectory");
+
         _app = app;
         _directories = directories
             .Select(directory => directory.Substring(directory.IndexOf('/') == 0 ? 1 : 0))
             .ToArray();
+
+        _app.ApplicationServices.GetRequiredService<FilteredDirectoryService>().Directories = _directories;
     }
 
     public IApplicationBuilder ServingFileTypes(params string[] fileTypes)
