@@ -7,12 +7,17 @@
     string cssFile = $"{pageName}.cshtml.css";
 }
 
-@if (DirectoryService.FileExists(jsFile))
+@if (DirectoryService.FileExists(jsFile)) // comment out to respond with 404 if file doesn't exist
 {
     <script src="@jsFile"></script>
 }
-
-@if (DirectoryService.FileExists(cssFile))
+@if (DirectoryService.FileExists(cssFile)) // comment out to respond with 404 if file doesn't exist
 {
     <link href="@cssFile" rel="stylesheet"/>
 }
+
+@*
+Alternatively, this implementation here in _ViewStart.cshtml injects js and css files in all views.
+The caveat is that the the server will check for the existence of the files on every request.
+The answer is cached, but it's still an extra request.
+*@

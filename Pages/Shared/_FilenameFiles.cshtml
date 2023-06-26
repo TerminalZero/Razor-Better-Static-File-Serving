@@ -1,0 +1,13 @@
+@{
+    string? pageName = ViewContext.ActionDescriptor.DisplayName;
+    string jsFile = $"{pageName}.cshtml.js";
+    string cssFile = $"{pageName}.cshtml.css";
+}
+
+<script src="@jsFile"></script>
+<link href="@cssFile" rel="stylesheet"/>
+
+@*
+Use this as a partial in razor page like so, to load <PageName>.cshtml.js and <PageName>.cshtml.css:
+<Partial name="_FilenameFiles"/>
+*@
