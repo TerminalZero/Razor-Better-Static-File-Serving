@@ -1,23 +1,16 @@
-﻿@inject TZeroSolutions.AspNetCore.ApplicationBuilderExtensions.FilteredDirectoryService DirectoryService
-
-@{
+﻿@{
     Layout = "_Layout";
-    string? pageName = ViewContext.ActionDescriptor.DisplayName;
-    string jsFile = $"{pageName}.cshtml.js";
-    string cssFile = $"{pageName}.cshtml.css";
 }
 
-@if (DirectoryService.FileExists(jsFile)) // comment out to respond with 404 if file doesn't exist
-{
-    <script src="@jsFile"></script>
-}
-@if (DirectoryService.FileExists(cssFile)) // comment out to respond with 404 if file doesn't exist
-{
-    <link href="@cssFile" rel="stylesheet"/>
-}
+<matching-css-js verify-files="true"/>
 
-@*
-Alternatively, this implementation here in _ViewStart.cshtml injects js and css files in all views.
-The caveat is that the the server will check for the existence of the files on every request.
-The answer is cached, but it's still an extra request.
+@* 
+    Optional Attributes are:
+    verify-files: true/false
+        True verifies that the files exist on the server before including them.
+        False will include the files even if they don't exist, resulting in a 404's instead.
+    css-only: true/false
+        Loads only the css files
+    js-only: true/false
+        Loads only the js files
 *@

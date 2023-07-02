@@ -28,9 +28,12 @@ public class FilteredDirectoryService
             .FirstOrDefault();
 
         if (requestedFile != null)
+        {
             Files.Add(requestedFile.Substring(requestedFile.LastIndexOf('/')));
+            return true;
+        }
         
-        return Files.Count > 0;
+        return false;
     }
 }
 
